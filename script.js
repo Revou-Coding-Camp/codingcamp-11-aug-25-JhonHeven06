@@ -1,34 +1,44 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const welcomeText = document.getElementById("welcome-text");
-    const nameInput = prompt("Please enter your name:");
-    if (nameInput) {
-        welcomeText.textContent = `Hi ${nameInput}, Welcome To Website`;
-    }
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("formBelajar");
+    const table = document.getElementById("dataTable").querySelector("tbody");
+    const welcomeText = document.getElementById("welcomeText");
 
-    const form = document.getElementById("contact-form");
-    const output = document.getElementById("output");
-
-    form.addEventListener("submit", function (e) {
+    form.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        let name = document.getElementById("name").value.trim();
-        let email = document.getElementById("email").value.trim();
-        let phone = document.getElementById("phone").value.trim();
-        let message = document.getElementById("message-text").value.trim();
+        const nama = document.getElementById("nama").value;
+        const tanggal = document.getElementById("tanggal").value;
+        const gender = document.querySelector("input[name='gender']:checked").value;
+        const pesan = document.getElementById("pesan").value;
 
-        if (!name || !email || !phone || !message) {
-            alert("Please fill all fields!");
+        if (!nama || !tanggal || !gender || !pesan) {
+            alert("Semua field harus diisi!");
             return;
         }
 
-        output.innerHTML = `
-            <h3>Submitted Data:</h3>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>Message:</strong> ${message}</p>
-        `;
+        // Update welcome text
+        welcomeText.textContent = `Hi, ${nama}!`;
 
+        // Tambahkan data ke tabel
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${nama}</td>
+            <td>${new Date(tanggal).toLocaleDateString()}</td>
+            <td>${gender}</td>
+            <td>${pesan}</td>
+            <td><a href="#">Klik Disini</a></td>
+            <td><button class="deleteBtn">X</button></td>
+        `;
+        table.appendChild(row);
+
+        // Reset form
         form.reset();
+    });
+
+    // Event hapus data
+    table.addEventListener("click", (e) => {
+        if (e.target.classList.contains("deleteBtn")) {
+            e.target.closest("tr").remove();
+        }
     });
 });
